@@ -61,3 +61,19 @@
     transform: translateX(0);
   }
 }
+
+/* Order tracking status steps */
+.status-step.active {
+  color: #f43f5e;
+}
+.status-step.active .step-icon {
+  background-color: #f43f5e;
+  color: white;
+}
+.status-step.completed {
+  color: #10b981;
+}
+.status-step.completed .step-icon {
+  background-color: #10b981;
+  color: white;
+}

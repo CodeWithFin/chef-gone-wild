@@ -16,6 +16,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [expandedSection, setExpandedSection] = useState(null)
+  const [showFullMenu, setShowFullMenu] = useState(false)
 
   useEffect(() => {
     loadMenu()
@@ -221,7 +222,7 @@ export default function Home() {
               </div>
               {expandedSection === 'menu' && (
                 <div className="pt-8 pb-4">
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-6">
                     {categories.map(category => (
                       <div
                         key={category}
@@ -235,6 +236,34 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
+                  
+                  {/* Show menu items when category is selected */}
+                  {selectedCategory && (
+                    <div className="space-y-4 max-h-[400px] overflow-y-auto">
+                      {menuItems
+                        .filter(item => item.category === selectedCategory)
+                        .map(item => (
+                          <div key={item.id} className="bg-white/5 border border-white/10 rounded-lg p-4 hover:border-rose-500 transition-colors">
+                            <div className="flex justify-between items-start gap-4">
+                              <div className="flex-1">
+                                <h3 className="font-['Anton'] text-xl uppercase tracking-tight mb-1">{item.name}</h3>
+                                <p className="text-gray-400 text-sm mb-2">{item.description || ''}</p>
+                                <span className="font-bold text-lg">KSh {item.price.toFixed(2)}</span>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  addToCart(item.id)
+                                }}
+                                className="bg-rose-500 text-white px-4 py-2 rounded-full hover:bg-rose-600 transition-colors font-medium whitespace-nowrap"
+                              >
+                                Add to Cart
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -340,19 +369,19 @@ export default function Home() {
           {/* Slideshow Images */}
           <div className="absolute inset-0 w-full h-full">
             <img 
-              src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1920&auto=format&fit=crop" 
+              src="/assets/food-1.jpg" 
               className={`absolute inset-0 w-full h-full object-cover brightness-75 contrast-125 saturate-50 transition-opacity duration-1000 ${currentSlide === 0 ? 'opacity-100' : 'opacity-0'}`}
-              alt="Cocktail"
+              alt="Food"
             />
             <img 
-              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" 
+              src="/assets/food-2.jpg" 
               className={`absolute inset-0 w-full h-full object-cover brightness-75 contrast-125 saturate-50 transition-opacity duration-1000 ${currentSlide === 1 ? 'opacity-100' : 'opacity-0'}`}
-              alt="Roasted Chicken"
+              alt="Food"
             />
             <img 
-              src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" 
+              src="/assets/food-3.jpg" 
               className={`absolute inset-0 w-full h-full object-cover brightness-75 contrast-125 saturate-50 transition-opacity duration-1000 ${currentSlide === 2 ? 'opacity-100' : 'opacity-0'}`}
-              alt="Bar Interior"
+              alt="Food"
             />
           </div>
 
@@ -389,7 +418,7 @@ export default function Home() {
         <div className="flex overflow-x-auto gap-6 px-6 lg:px-12 pb-12 no-scrollbar snap-x snap-mandatory fade-enter scroll-trigger delay-100">
           {/* Featured Items */}
           {featuredItems.map((item, index) => (
-            <div key={item.id} className="min-w-[85vw] md:min-w-[400px] snap-center group cursor-pointer">
+            <div key={item.id} className="min-w-[85vw] md:min-w-[400px] snap-center group">
               <div className="aspect-[4/5] bg-black overflow-hidden relative mb-4">
                 <img 
                   src={item.image_url || 'https://via.placeholder.com/400x500'} 
@@ -399,24 +428,33 @@ export default function Home() {
                 <div className="absolute top-4 left-4 bg-white text-black text-xs font-bold px-2 py-1 uppercase">{item.category}</div>
               </div>
               <div className="flex justify-between items-start border-t-2 border-black pt-4">
-                <div>
+                <div className="flex-1">
                   <h3 className="font-['Anton'] text-3xl uppercase tracking-tight">{item.name}</h3>
                   <p className="text-gray-600 font-medium text-sm mt-1">{item.description || ''}</p>
+                  <span className="font-bold text-xl block mt-2">KSh {item.price.toFixed(2)}</span>
                 </div>
-                <span className="font-bold text-xl">KSh {item.price.toFixed(2)}</span>
+                <button
+                  onClick={() => addToCart(item.id)}
+                  className="ml-4 bg-rose-500 text-white px-6 py-3 rounded-full hover:bg-rose-600 transition-colors font-bold uppercase text-sm whitespace-nowrap"
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}
 
           {/* Full Menu Card */}
-          <div className="min-w-[85vw] md:min-w-[400px] snap-center group cursor-pointer">
+          <div 
+            className="min-w-[85vw] md:min-w-[400px] snap-center group cursor-pointer"
+            onClick={() => setShowFullMenu(true)}
+          >
             <div className="aspect-[4/5] bg-black overflow-hidden relative mb-4 flex items-center justify-center">
               <div className="text-center p-8 border-4 border-white z-10">
                 <h4 className="font-['Anton'] text-5xl text-white uppercase mb-2">Full Menu</h4>
                 <div className="w-12 h-1 bg-rose-500 mx-auto"></div>
               </div>
               <img 
-                src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/917d6f93-fb36-439a-8c48-884b67b35381_1600w.jpg" 
+                src="/assets/food-2.jpg" 
                 className="absolute inset-0 w-full h-full object-cover brightness-50"
                 alt="Full Menu"
               />
@@ -431,6 +469,77 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Full Menu Modal */}
+      {showFullMenu && (
+        <div className="fixed inset-0 bg-black/90 z-50 overflow-y-auto">
+          <div className="min-h-screen bg-[#0a0a0a] text-stone-200">
+            {/* Header */}
+            <div className="sticky top-0 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10 z-40 px-6 py-4">
+              <div className="flex justify-between items-center">
+                <h1 className="font-['Anton'] text-4xl lg:text-6xl uppercase">Full Menu</h1>
+                <button 
+                  onClick={() => setShowFullMenu(false)}
+                  className="p-2 hover:bg-white/10 rounded-full"
+                >
+                  <i data-lucide="x" className="w-8 h-8"></i>
+                </button>
+              </div>
+            </div>
+
+            {/* Menu Content */}
+            <div className="px-6 lg:px-12 py-12">
+              {categories.map(category => {
+                const categoryItems = menuItems.filter(item => item.category === category)
+                if (categoryItems.length === 0) return null
+
+                return (
+                  <div key={category} className="mb-16 fade-enter scroll-trigger">
+                    <h2 className="font-['Anton'] text-5xl lg:text-7xl uppercase mb-8 text-white border-b border-white/20 pb-4">
+                      {category}
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {categoryItems.map(item => (
+                        <div 
+                          key={item.id} 
+                          className="bg-white/5 border border-white/10 rounded-lg overflow-hidden hover:border-rose-500 transition-colors group"
+                        >
+                          <div className="aspect-[4/3] bg-black overflow-hidden relative">
+                            <img
+                              src={item.image_url || 'https://via.placeholder.com/400x300'}
+                              alt={item.name}
+                              className="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700"
+                            />
+                            <div className="absolute top-4 left-4 bg-white text-black text-xs font-bold px-2 py-1 uppercase">
+                              {item.category}
+                            </div>
+                          </div>
+                          <div className="p-4">
+                            <h3 className="font-['Anton'] text-2xl uppercase tracking-tight mb-2">{item.name}</h3>
+                            <p className="text-gray-400 text-sm mb-4">{item.description || ''}</p>
+                            <div className="flex justify-between items-center">
+                              <span className="font-bold text-xl">KSh {item.price.toFixed(2)}</span>
+                              <button
+                                onClick={() => {
+                                  addToCart(item.id)
+                                  setShowFullMenu(false)
+                                }}
+                                className="bg-rose-500 text-white px-4 py-2 rounded-full hover:bg-rose-600 transition-colors font-medium"
+                              >
+                                Add to Cart
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer Area */}
       <footer className="bg-black text-white pt-24 pb-12 px-6 lg:px-12 border-t border-white/10">
@@ -546,10 +655,18 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Order Type *</label>
+                <label className="block text-sm font-medium mb-2">Table Number *</label>
                 <select name="order-type" required className="w-full bg-white/10 border border-white/20 rounded px-4 py-2 focus:outline-none focus:border-rose-500 text-white">
-                  <option value="pickup">Pickup</option>
-                  <option value="delivery">Delivery</option>
+                  <option value="table-1">Table 1</option>
+                  <option value="table-2">Table 2</option>
+                  <option value="table-3">Table 3</option>
+                  <option value="table-4">Table 4</option>
+                  <option value="table-5">Table 5</option>
+                  <option value="table-6">Table 6</option>
+                  <option value="table-7">Table 7</option>
+                  <option value="table-8">Table 8</option>
+                  <option value="table-9">Table 9</option>
+                  <option value="table-10">Table 10</option>
                 </select>
               </div>
 

@@ -157,7 +157,7 @@ export default function AdminPage() {
                     <div className="space-y-2 mb-4">
                       <p className="font-medium">{order.customer_name}</p>
                       <p className="text-sm text-gray-400">{order.customer_phone}</p>
-                      <p className="text-sm uppercase">{order.order_type}</p>
+                      <p className="text-sm uppercase">{order.order_type.replace('table-', 'Table ')}</p>
                     </div>
                     <div className="flex justify-between items-center pt-4 border-t border-white/10">
                       <span className="text-sm text-gray-400">{order.item_count} item(s)</span>
@@ -188,10 +188,10 @@ export default function AdminPage() {
                     <p className="font-medium text-lg">{selectedOrder.customer_name}</p>
                     <p className="text-gray-400">{selectedOrder.customer_phone}</p>
                   </div>
-                  <div>
-                    <p className="text-sm text-gray-400 mb-1">Order Type</p>
-                    <p className="font-medium uppercase">{selectedOrder.order_type}</p>
-                  </div>
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Table</p>
+                      <p className="font-medium uppercase">{selectedOrder.order_type.replace('table-', 'Table ')}</p>
+                    </div>
                   <div>
                     <p className="text-sm text-gray-400 mb-1">Placed At</p>
                     <p className="font-medium">

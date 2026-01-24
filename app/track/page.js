@@ -127,7 +127,7 @@ function TrackPageContent() {
                     {[
                       { id: 'step-new', icon: 'check', label: 'Order Placed', desc: new Date(order.created_at).toLocaleString('en-KE', { dateStyle: 'long', timeStyle: 'short' }) },
                       { id: 'step-preparing', icon: 'chef-hat', label: 'Preparing', desc: 'Your order is being prepared' },
-                      { id: 'step-ready', icon: 'check-circle', label: 'Ready', desc: `Your order is ready for ${order.order_type}` },
+                      { id: 'step-ready', icon: 'check-circle', label: 'Ready', desc: `Your order is ready at ${order.order_type.replace('table-', 'Table ')}` },
                       { id: 'step-completed', icon: 'package', label: 'Completed', desc: 'Order completed' }
                     ].map((step, index) => {
                       const isActive = activeSteps.includes(step.id)
@@ -175,8 +175,8 @@ function TrackPageContent() {
                       <p className="text-gray-400 text-sm">{order.customer_phone}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-400 mb-1">Order Type</p>
-                      <p className="font-medium uppercase">{order.order_type}</p>
+                      <p className="text-sm text-gray-400 mb-1">Table</p>
+                      <p className="font-medium uppercase">{order.order_type.replace('table-', 'Table ')}</p>
                     </div>
                   </div>
 
@@ -218,24 +218,6 @@ function TrackPageContent() {
           </div>
         </main>
       </div>
-
-      <style jsx>{`
-        .status-step.active {
-          color: #f43f5e;
-        }
-        .status-step.active .step-icon {
-          background-color: #f43f5e;
-          color: white;
-        }
-        .status-step.completed {
-          color: #10b981;
-        }
-        .status-step.completed .step-icon {
-          background-color: #10b981;
-          color: white;
-        }
-      `}</style>
-    </div>
   )
 }
 
