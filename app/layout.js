@@ -1,5 +1,6 @@
 import './globals.css'
 import Script from 'next/script'
+import { CartProvider } from '../components/CartContext'
 
 export const metadata = {
   title: 'Chef Gone Wild - Order Online',
@@ -15,8 +16,10 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
       </head>
       <body>
+        <CartProvider>
+          {children}
+        </CartProvider>
         <Script src="https://unpkg.com/lucide@latest" strategy="afterInteractive" />
-        {children}
       </body>
     </html>
   )
